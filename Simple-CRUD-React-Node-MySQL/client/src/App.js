@@ -303,3 +303,32 @@ function App() {
       );
     });
   };
+// Rates
+  // const fetchRentalRates = () => {
+  //   Axios.get("http://localhost:3001/rentalRates").then((response) => {
+  //     setRentalRates(response.data);
+  //   });
+  // };
+
+
+  return (
+    <div className="Content">
+      {/* Navigation bar */}
+      <nav>
+        <ul>
+          <li>
+            <h4 onClick={() => setCurrentPage("customers")}>Customers</h4>
+          </li>
+          <li>
+            <h4 onClick={() => setCurrentPage("cars")}>Cars</h4>
+          </li>
+        </ul>
+      </nav>
+
+      {/* Render the content of the current page */}
+      {renderPageContent()}
+    </div>
+  );
+}
+
+export default App;
