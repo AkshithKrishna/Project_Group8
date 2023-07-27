@@ -131,3 +131,183 @@ async function createTables() {
 
 // Call the function to create the tables and insert data
  //createTables();
+// Customers CRUD
+app.post("/create", (req, res) => {
+  const name = req.body.name;
+  const email = req.body.email;
+  const phone_number = req.body.phone_number;
+  const rental_date = req.body.rental_date;
+  const return_date = req.body.return_date;
+
+  db.query(
+    "INSERT INTO customers (name, email, phone_number) VALUES (?,?,?)",
+    [name, email, phone_number],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        const customer_id = result.insertId; // Get the auto-generated customer_id from the result
+
+        // Insert the rental date and return date into the Rentals table
+        db.query(
+          "INSERT INTO Rentals (customer_id, rental_date, return_date) VALUES (?, ?, ?)",
+          [customer_id, rental_date, return_date],
+          (err, result) => {
+            if (err) {
+              console.log(err);
+            } else {
+              res.send("Customer and Rental Details Inserted");
+            }
+          }
+        );
+      }
+    }
+  );
+});
+// app.post("/create", (req, res) => {
+//   const name = req.body.name;
+//   const email = req.body.email;
+//   const phone_number = req.body.phone_number;
+
+//   db.query(
+//     "INSERT INTO customers (name, email, phone_number) VALUES (?,?,?)",
+//     [name, email, phone_number],
+//     (err, result) => {
+//       if (err) {
+//         console.log(err);
+//       } else {
+//         res.send("Values Inserted");
+//       }
+//     }
+//   );
+// });
+
+app.get("/customers", async (req, res) => {
+  try {
+    // Query to fetch customers with their rental dates and return dates
+    const customersWithRentalDates = await executeQuery(`
+      SELECT c.*, r.rental_date, r.return_date
+      FROM Customers c
+      LEFT JOIN Rentals r ON c.customer_id = r.customer_id;
+    `);
+
+    res.send(customersWithRentalDates);
+
+  } catch (err) {
+    console.error("Error fetching customers with rental dates:", err);
+    res.status(500).send("Internal Server Error");
+  } finally {
+    
+  }
+});
+
+app.put("/update", (req, res) => {
+  const customer_id = req.body.customer_id;
+  const phone_number = req.body.phone_number;
+  db.query(
+    "UPDATE customers SET phone_number = ? WHERE customer_id = ?",
+    [phone_number, customer_id],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error updating customer phone number");
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+app.delete("/delete/:customer_id", (req, res) => {
+  const customer_id = req.params.customer_id;
+  db.query("DELETE FROM customers WHERE customer_id = ?", customer_id, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+// cars CRUD
+app.post("/createcar", (req, res) => {
+  const make = req.body.make;
+  const model = req.body.model;
+  const year = req.body.year;
+  const rental_rate_per_day = req.body.rental_rate_per_day; // New parameter for rental rate per day
+
+  db.query(
+    "INSERT INTO Cars (make, model, year) VALUES (?,?,?)",
+    [make, model, year],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        // After inserting the car into Cars table, also insert the rental rate into RentalRates table
+        const car_id = result.insertId; // Get the auto-generated car_id from the result
+        db.query(
+          "INSERT INTO RentalRates (car_id, rental_rate_per_day) VALUES (?, ?)",
+          [car_id, rental_rate_per_day],
+          (err, result) => {
+            if (err) {
+              console.log(err);
+            } else {
+              res.send("Car and Rental Rate Inserted");
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+app.get("/cars", async (req, res) => {
+  try {
+    // Query to fetch cars with their rental rates
+    const carsWithRentalRates = await executeQuery(`
+      SELECT c.*, rr.rental_rate_per_day
+      FROM Cars c
+      LEFT JOIN RentalRates rr ON c.car_id = rr.car_id;
+    `);
+
+    res.send(carsWithRentalRates);
+
+  } catch (err) {
+    console.error("Error fetching cars with rental rates:", err);
+    res.status(500).send("Internal Server Error");
+  } finally {
+    
+  }
+});
+
+app.put("/updatecar", (req, res) => {
+  const car_id = req.body.car_id;
+  const year = req.body.year;
+  db.query(
+    "UPDATE Cars SET year = ? WHERE car_id = ?",
+    [year, car_id],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error updating customer phone number");
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+app.delete("/delete/:car_id", (req, res) => {
+  const car_id = req.params.car_id;
+  db.query("DELETE FROM Cars WHERE car_id = ?", car_id, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+app.listen(3001, () => {
+  console.log("Yey, your server is running on port 3001");
+});
