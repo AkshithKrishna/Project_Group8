@@ -6,6 +6,8 @@ github id:#48556163
 Member 2:Pravallika Popuri
 Github id :#140572349
 
+Youtube link: https://youtu.be/xo5nadPVDrY
+
 General Description of the Database of this project:
 
 Used sql software: Mysql
