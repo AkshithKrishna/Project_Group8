@@ -42,19 +42,25 @@ Github commits list:
 Akshith:
 1. Initial commit : Initially started commiting with the skeleton of this project
     commit id :6d9a9986ad1ecc70d48ddc6ce14a4fad77f82fb2
+
 2.In the second commit, we added the some basic elements of the ui
     commit id: 77ebb06da615351eefebdc3ec56bf83febb37079
+    
 3.In the third commit, we have added the handling the ui with respect to the CRUD operations.
     commit id:890fe34c4f9c599a1fd594cfba74c7c58f78fcab
+    
 4. In the fourth commit, we had made some corrections in the existing code and added method for returning the result.
        commit id:0ac28f47db91145d6c8e51e987f67ab8b10a1264
 
 Pravallika:
 1.Added the basic sql connection to the project.
     commit id:9b90b6a219309a1fd7d5797e4e9955e94d10e57a
+    
 2.Added the logic for the creating the tables and insertion of data into the tables.
     commit id:d32f8f57b206ebbd16a6fd13353b23dd234235b9
+    
 3.Added the Update and delete functionality of the data to the project.
     commit id: 2dabc1fe27efc51edc28fe74871f0445bc191584
+    
 4.Added the SQL Tables description files
     commit id:60c1685ff3edea121452e2ca64208f83e90adf98
